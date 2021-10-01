@@ -1,4 +1,4 @@
-package com.example.shoppingAplication.model;
+package com.example.shoppingapplication.model;
 
 public class Comment {
     private String title;

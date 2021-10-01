@@ -1,4 +1,4 @@
-package com.example.shoppingAplication.model;
+package com.example.shoppingapplication.model;
 
 import java.util.ArrayList;
 import java.util.Objects;

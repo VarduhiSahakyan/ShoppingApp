@@ -1,4 +1,4 @@
-package com.example.shoppingAplication.model;
+package com.example.shoppingapplication.model;
 
 import java.io.Serializable;
 import java.util.Objects;
