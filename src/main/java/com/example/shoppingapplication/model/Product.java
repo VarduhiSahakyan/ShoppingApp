@@ -1,15 +1,29 @@
 package com.example.shoppingapplication.model;
 
+import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
-public class Product {
 
+@Entity
+@Table(name = "products")
+public class Product {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "productName")
     private String productName;
+
+    @Column(name = "price")
     private double price;
+
+    @OneToMany(mappedBy = "product")
+    private List<Comment> comments;
+
+    @OneToMany(mappedBy = "product_id", cascade = CascadeType.ALL)
     private ArrayList<Rating> rates;
-    private ArrayList<Comment> comments;
 
     public Product() {
     }
@@ -52,7 +66,7 @@ public class Product {
         this.rates = rates;
     }
 
-    public ArrayList<Comment> getComments() {
+    public List<Comment> getComments() {
         return comments;
     }
 

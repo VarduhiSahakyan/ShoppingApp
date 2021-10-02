@@ -1,14 +1,20 @@
 package com.example.shoppingapplication.model;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 
+@Entity
+@Table(name = "ratings")
 public class Rating implements Serializable {
     public static enum Rate {
         ONE, TWO, THREE, FOUR, FIVE
     }
-
+    @Id
+    @Column(name = "product_id")
     private Long ProductId;
+    @Enumerated(value = EnumType.STRING)
+    @Column(name = "rate")
     private Rate rate;
 
     public Rating() {

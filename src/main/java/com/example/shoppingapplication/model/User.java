@@ -1,30 +1,62 @@
 package com.example.shoppingapplication.model;
 
+import com.example.shoppingapplication.model.enums.Category;
+import com.example.shoppingapplication.model.enums.Role;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
+import java.util.Set;
 
+@Entity
+@Table(name = "users")
 public class User {
+    @Id
+    @Column(name = "username")
+    @NotNull
+    private String username;
 
-    private String name;
+    @Column(name = "password")
+    @NotNull
     private String password;
-    private Role role;
+
+
+    @Enumerated(value = EnumType.STRING)
+    @Column(name = "category")
     private Category category;
+
+    @Enumerated(value = EnumType.STRING)
+    @Column(name = "role")
+    private Role role;
+    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
+    @CollectionTable(name = "role", joinColumns = @JoinColumn(name = "username"))
+    @Enumerated(value = EnumType.STRING)
+    private Set<Role> roles;
 
     public User() {
     }
 
     public User(String name, String password, Role role, Category category) {
-        this.name = name;
+        username = name;
         this.password = password;
         this.role = role;
         this.category = category;
     }
 
-    public String getName() {
-        return name;
+    public Set<Role> getRoles() {
+        return roles;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String name) {
+        username = name;
     }
 
     public String getPassword() {
@@ -56,18 +88,18 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(name, user.name) && role == user.role && category == user.category;
+        return Objects.equals(username, user.username);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, role, category);
+        return Objects.hash(username, role, category);
     }
 
     @Override
     public String toString() {
         return "User{" +
-                "username='" + name + '\'' +
+                "username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", role=" + role +
                 ", category=" + category +
