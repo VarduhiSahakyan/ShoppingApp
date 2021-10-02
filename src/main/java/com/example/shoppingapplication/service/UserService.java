@@ -4,8 +4,11 @@ import com.example.shoppingapplication.model.enums.Category;
 import com.example.shoppingapplication.model.enums.Role;
 import com.example.shoppingapplication.model.User;
 import com.example.shoppingapplication.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -13,11 +16,8 @@ import java.util.List;
 public class UserService {
     private final UserRepository userRepository;
 
-    private final String PASSWORD_EXPRESSION = "(?i)^(?=[a-z])(?=.*[0-9])([a-z0-9!@#$%\\^&*()_?+\\-=]){8,15}$";
+    private final String PASSWORD_EXPRESSION = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–{}:;',?/*~$^+=<>]).{8,15}$";
 
-
-
-    @Autowired
     public UserService(UserRepository userRepository ) {
         this.userRepository = userRepository;
 
@@ -25,7 +25,6 @@ public class UserService {
     public List<User> findAll() {
         return userRepository.findAll();
     }
-
 
     public User findByUsername(String username) {
         return userRepository.findByUsernameIgnoreCase(username);
@@ -41,16 +40,13 @@ public class UserService {
 
     public void deleteByUsername(String username) {
         User user = findByUsername(username);
-        if (user == null) {
-            System.out.println("user not found");
-            return;
-        }
+        if (user == null) throw new UsernameNotFoundException("User not found");
         delete(user);
     }
 
     public void blockByUsername(String username) throws UsernameNotFoundException {
         User user = findByUsername(username);
-        if (user == null) throw new UsernameNotFoundException("user not found");
+        if (user == null) throw new UsernameNotFoundException("User not found");
 
         user.setCategory(Category.BLOCKED);
         update(user);
@@ -58,7 +54,7 @@ public class UserService {
 
     public void unblockByUsername(String username) throws UsernameNotFoundException {
         User user = findByUsername(username);
-        if (user == null) throw new UsernameNotFoundException("user not found");
+        if (user == null) throw new UsernameNotFoundException("User not found");
 
         user.setCategory(Category.UNBLOCKED);
         update(user);
@@ -67,10 +63,10 @@ public class UserService {
     public void singUp(String username, String password){
         User user = findByUsername(username);
         if (user != null) {
-           // throw new BadCredentialsException("Username already exists");
+            throw new BadCredentialsException("Username already exists");
         }
         if (!password.matches(PASSWORD_EXPRESSION)) {
-          //  throw new BadCredentialsException("Bad password");
+            throw new BadCredentialsException("Incorrect password password");
         }
 
         user = new User();
@@ -81,4 +77,6 @@ public class UserService {
 
         userRepository.save(user);
     }
+
+
 }
