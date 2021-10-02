@@ -9,14 +9,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.Set;
 
-public class SecurityUser implements UserDetails {
+public class UserSecurity implements UserDetails {
     private final String username;
     private final String password;
     private final Set<SimpleGrantedAuthority> authorities;
     private final boolean isActive;
 
 
-    public SecurityUser(User user) {
+    public UserSecurity(User user) {
         this.username = user.getUsername();
         this.password = user.getPassword();
         this.authorities = user.getRole().getAuthorities();

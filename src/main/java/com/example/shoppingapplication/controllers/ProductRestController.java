@@ -3,7 +3,7 @@ package com.example.shoppingapplication.controllers;
 
 import com.example.shoppingapplication.model.Product;
 import com.example.shoppingapplication.model.Rating;
-import com.example.shoppingapplication.security.SecurityUser;
+import com.example.shoppingapplication.security.UserSecurity;
 import com.example.shoppingapplication.service.ProductService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -24,8 +24,7 @@ public class ProductRestController {
 
     @GetMapping
     public List<Product> getAllProducts() {
-        List<Product> all = productService.getAll();
-        return all;
+        return productService.getAll();
     }
 
     @GetMapping("/name")
@@ -55,7 +54,7 @@ public class ProductRestController {
 
     @PostMapping("/add-comment")
     @PreAuthorize("isAuthenticated()")
-    public void commentProduct(@AuthenticationPrincipal SecurityUser user,
+    public void commentProduct(@AuthenticationPrincipal UserSecurity user,
                                @RequestBody Map<String, String> map) {
         Long productId = Long.parseLong(map.get("productId"));
         String comment = map.get("comment");
@@ -65,7 +64,7 @@ public class ProductRestController {
 
     @DeleteMapping("/del-comment")
     @PreAuthorize("isAuthenticated()")
-    public void deleteProductComment(@AuthenticationPrincipal SecurityUser user,
+    public void deleteProductComment(@AuthenticationPrincipal UserSecurity user,
                                      @RequestBody Map<String, String> map) {
         Long commentId = Long.parseLong(map.get("commentId"));
         productService.deleteComment(user.getUsername(), commentId);
@@ -73,7 +72,7 @@ public class ProductRestController {
 
     @PostMapping("/rate")
     @PreAuthorize("isAuthenticated()")
-    public void rateProduct(@AuthenticationPrincipal SecurityUser user,
+    public void rateProduct(@AuthenticationPrincipal UserSecurity user,
                             @RequestBody Map<String, String> map) {
         Rating.Rate r = Rating.Rate.valueOf(map.get("rate"));
         Long productId = Long.parseLong(map.get("productId"));
@@ -82,7 +81,7 @@ public class ProductRestController {
 
     @DeleteMapping("/rate")
     @PreAuthorize("isAuthenticated()")
-    public void deleteProductRate(@AuthenticationPrincipal SecurityUser user,
+    public void deleteProductRate(@AuthenticationPrincipal UserSecurity user,
                                   @RequestBody Map<String, String> map) {
         Long productId = Long.parseLong(map.get("productId"));
         productService.deleteRate(user.getUsername(), productId);
