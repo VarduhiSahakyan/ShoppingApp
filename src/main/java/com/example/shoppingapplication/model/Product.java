@@ -86,6 +86,7 @@ public class Product {
     public void setComments(ArrayList<Comment> comments) {
         this.comments = comments;
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

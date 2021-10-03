@@ -28,13 +28,13 @@ public class User {
     @Enumerated(value = EnumType.STRING)
     @Column(name = "role")
     private Role role;
+
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "role", joinColumns = @JoinColumn(name = "username"))
     @Enumerated(value = EnumType.STRING)
     private Set<Role> roles;
 
-    public User() {
-    }
+    public User() { }
 
     public User(String name, String password, Role role, Category category) {
         username = name;

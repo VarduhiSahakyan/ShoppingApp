@@ -52,8 +52,6 @@ public class UserRestController {
     public void blockByUsername(@RequestBody Map<String, String> body) {
         String username = body.get("username");
         userService.blockByUsername(username);
-
-        // deleteProduct from session
     }
 
 
@@ -62,6 +60,4 @@ public class UserRestController {
         String username = body.get("username");
         userService.unblockByUsername(username);
     }
-
-
 }

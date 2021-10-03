@@ -12,12 +12,15 @@ public class Rating implements Serializable {
     public static enum Rate {
         ONE, TWO, THREE, FOUR, FIVE
     }
+
     @Id
     @Column(name = "product_id")
     private Long productId;
+
     @Enumerated(value = EnumType.STRING)
     @Column(name = "rate")
     private Rate rate;
+
     @Id
     @Column(name = "username")
     private String username;
@@ -26,8 +29,8 @@ public class Rating implements Serializable {
     @JoinColumn(name = "product_id")
     @JsonManagedReference
     public Product product;
-    public Rating() {
-    }
+
+    public Rating() {    }
 
     public Rating(Long productId, Rate rate, String username) {
         this.productId = productId;
