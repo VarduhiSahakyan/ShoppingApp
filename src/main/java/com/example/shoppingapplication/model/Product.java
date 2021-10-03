@@ -1,5 +1,7 @@
 package com.example.shoppingapplication.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,17 +15,20 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "productName")
+    @Column(name = "name")
     private String productName;
 
     @Column(name = "price")
     private double price;
 
     @OneToMany(mappedBy = "product")
+    @JsonBackReference
     private List<Comment> comments;
 
-    @OneToMany(mappedBy = "product_id", cascade = CascadeType.ALL)
-    private ArrayList<Rating> rates;
+
+    @OneToMany(mappedBy = "product")
+    @JsonBackReference
+    private List<Rating> rates;
 
     public Product() {
     }
@@ -32,6 +37,14 @@ public class Product {
         this.id = id;
         this.productName = productName;
         this.price = price;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
+    public void setRates(List<Rating> rates) {
+        this.rates = rates;
     }
 
     public Long getId() {
@@ -58,7 +71,7 @@ public class Product {
         this.price = price;
     }
 
-    public ArrayList<Rating> getRates() {
+    public List<Rating> getRates() {
         return rates;
     }
 

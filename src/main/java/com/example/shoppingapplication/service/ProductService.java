@@ -29,6 +29,17 @@ public class ProductService {
 
         this.entityManager = entityManager;
     }
+    public void createProduct(Product product) {
+        productRepository.save(product);
+    }
+
+    public void deleteProduct(Long productId) {
+        Optional<Product> productOptional = productRepository.findById(productId);
+        if (productOptional.isPresent()) {
+            Product product = productOptional.get();
+            productRepository.delete(product);
+        }
+    }
 
     public List<Product> getAll() {
         return productRepository.findAll();
@@ -47,56 +58,42 @@ public class ProductService {
     }
 
     public List<Product> getAllByName(String name) {
-        return productRepository.findByNameIgnoreCase(name);
+        return productRepository.findByNameContains(name);
     }
 
     @Transactional
-    public void rateProduct(String username, Long productId, Rating.Rate r) {
+    public void getProductReting(Long productId, Rating.Rate rating) {
         List<Rating> resultList;
         resultList = entityManager.createQuery(
-                "SELECT r FROM Rating r where r.product_id = :pId",
+                "SELECT r FROM Rating r where r.productId = :pId",
                 Rating.class)
-                .setParameter("uName", username)
                 .setParameter("pId", productId)
                 .getResultList();
 
         if (resultList.size() == 0) {
             entityManager.createNativeQuery(
-                    "insert into rates (username, product_id, rate) VALUES (?, ?, ?)")
-                    .setParameter(1, username)
-                    .setParameter(2, productId)
-                    .setParameter(3, r.name())
+                    "insert into rates ( product_id, rate) VALUES (?, ?)")
+                    .setParameter(1, productId)
+                    .setParameter(2, rating.name())
                     .executeUpdate();
         } else {
             entityManager.createNativeQuery(
-                    "update rates r set rate = ? where r.username = ? and r.product_id = ?")
-                    .setParameter(1, r.name())
-                    .setParameter(2, username)
-                    .setParameter(3, productId)
+                    "update rates r set rate = ? where r.product_id = ?")
+                    .setParameter(1, rating.name())
+                    .setParameter(2, productId)
                     .executeUpdate();
         }
     }
 
     @Transactional
-    public void deleteRate(String username, Long productId) {
+    public void deleteRating(String username, Long productId) {
         entityManager.createNativeQuery(
-                "DELETE FROM rates r WHERE r.username = ? AND r.product_id = ?")
-                .setParameter(1, username)
-                .setParameter(2, productId)
+                "DELETE FROM ratings r WHERE r.product_id = ?")
+                .setParameter(1, productId)
                 .executeUpdate();
     }
 
-    public void create(Product product) {
-        productRepository.save(product);
-    }
 
-    public void delete(Long productId) {
-        Optional<Product> productOptional = productRepository.findById(productId);
-        if (productOptional.isPresent()) {
-            Product product = productOptional.get();
-            productRepository.delete(product);
-        }
-    }
 
     @Transactional
     public void addComment(String username, Long productId, String comment) {
@@ -116,7 +113,7 @@ public class ProductService {
                 .getResultList();
 
         if (list.size() > 0) {
-            String uName = list.get(0).getTitle();
+            String uName = list.get(0).getUsername();
             if (uName.equals(username)) {
                 entityManager.createNativeQuery(
                         "DELETE FROM comments c WHERE c.id = ?")

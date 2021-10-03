@@ -66,7 +66,7 @@ public class UserService {
             throw new BadCredentialsException("Username already exists");
         }
         if (!password.matches(PASSWORD_EXPRESSION)) {
-            throw new BadCredentialsException("Incorrect password password");
+            throw new BadCredentialsException("Incorrect password");
         }
 
         user = new User();

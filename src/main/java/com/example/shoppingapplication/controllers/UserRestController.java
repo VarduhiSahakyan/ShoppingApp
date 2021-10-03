@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping(value = "/api/users")
+@RequestMapping(value = "/users")
 @PreAuthorize("hasAuthority('admin:permission')")
 public class UserRestController {
 
@@ -35,7 +35,7 @@ public class UserRestController {
 
 
     @PostMapping
-    public User create(@RequestBody User user) {
+    public User createUser(@RequestBody User user) {
         userService.update(user);
         return user;
     }
@@ -53,7 +53,7 @@ public class UserRestController {
         String username = body.get("username");
         userService.blockByUsername(username);
 
-        // delete from session
+        // deleteProduct from session
     }
 
 

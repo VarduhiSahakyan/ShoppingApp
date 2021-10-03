@@ -1,6 +1,7 @@
 package com.example.shoppingapplication.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -14,6 +15,7 @@ public class Comment {
 
     @ManyToOne
     @JoinColumn(name = "product_id")
+    @JsonManagedReference
     private Product product;
 
     @Column(name = "username")
@@ -78,54 +80,3 @@ public class Comment {
         this.comment = message;
     }
 }
-
-/*
-@Entity
-@Table(name = "comments")
-public class Comment {
-    @Id
-    @GeneratedValue
-    private Long productId;
-
-    @Column(name = "title")
-    private String title;
-
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
-
-    @Column(name = "comment")
-    private String comment;
-
-    public Comment() {
-    }
-
-    public Comment(Long commentId, String title, Long productId) {
-        this.commentId = commentId;
-        this.title = title;
-        this.productId = productId;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public Long getProductId() {
-        return productId;
-    }
-
-    public void setProductId(Long productId) {
-        this.productId = productId;
-    }
-}
-
-
- */

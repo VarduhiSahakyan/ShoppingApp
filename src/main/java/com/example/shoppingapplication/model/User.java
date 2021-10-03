@@ -93,7 +93,7 @@ public class User {
 
     @Override
     public int hashCode() {
-        return Objects.hash(username, role, category);
+        return Objects.hash(username);
     }
 
     @Override

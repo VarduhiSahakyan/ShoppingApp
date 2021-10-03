@@ -3,22 +3,25 @@ package com.example.shoppingapplication.model.enums;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public enum Role {
-    ADMIN {
-        @Override
-        public Set<SimpleGrantedAuthority> getAuthorities() {
-            return super.getAuthorities();
-        }
-    },
-    USER{
-        @Override
-        public Set<SimpleGrantedAuthority> getAuthorities() {
-            return super.getAuthorities();
-        }
-    };
+    ADMIN(Set.of(Permission.ADMIN_PERMISSION)),
+    USER(Set.of(Permission.USER_PERMISSION));
+
+    private final Set<Permission> permissions;
+
+    Role(Set<Permission> permissions) {
+        this.permissions = permissions;
+    }
+
+    public Set<Permission> getPermissions() {
+        return this.permissions;
+    }
 
     public Set<SimpleGrantedAuthority> getAuthorities() {
-    return USER.getAuthorities();
+        return permissions.stream()
+                .map(p -> new SimpleGrantedAuthority(p.getPermission()))
+                .collect(Collectors.toSet());
     }
 }

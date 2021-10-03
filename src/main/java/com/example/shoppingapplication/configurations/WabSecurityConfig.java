@@ -15,7 +15,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-import javax.sql.DataSource;
 
 @Configuration
 @EnableWebSecurity
@@ -33,22 +32,23 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/auth/sing-up").permitAll()
-                .antMatchers("/api/products").permitAll()
-                .antMatchers("/api/products/comm").permitAll()
-                .antMatchers("/api/products/filter").permitAll()
-                .anyRequest().authenticated()
+                    .antMatchers("/auth/sing-up").permitAll()
+                    .antMatchers("/api/products/*").permitAll()
+                    .antMatchers("/api/products").permitAll()
+                    .antMatchers("/api/products/comm").permitAll()
+                    .antMatchers("/api/products/filter").permitAll()
+                    .anyRequest().authenticated()
                 .and()
-                .formLogin()
-                .loginPage("/auth/login").permitAll()
-                .defaultSuccessUrl("/api/products")
+                    .formLogin()
+                    .loginPage("/auth/login").permitAll()
+                    .defaultSuccessUrl("/api/products")
                 .and()
-                .logout()
-                .logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout", "POST"))
-                .invalidateHttpSession(true)
-                .clearAuthentication(true)
-                .deleteCookies("JSESSIONID")
-                .logoutSuccessUrl("/auth/login");
+                    .logout()
+                    .logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout", "POST"))
+                    .invalidateHttpSession(true)
+                    .clearAuthentication(true)
+                    .deleteCookies("JSESSIONID")
+                    .logoutSuccessUrl("/auth/login");
     }
 
     @Override
