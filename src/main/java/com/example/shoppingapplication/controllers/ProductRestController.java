@@ -42,7 +42,7 @@ public class ProductRestController {
 
     @PostMapping(value = "/add",   consumes = MediaType.APPLICATION_JSON_VALUE)
 
-   // @PreAuthorize("hasAuthority('admin:permission')")
+    @PreAuthorize("hasAuthority('admin:permission')")
     public void create(@RequestBody Product product) {
         productService.createProduct(product);
     }
@@ -79,7 +79,7 @@ public class ProductRestController {
                             @RequestBody Map<String, String> map) {
         Rating.Rate r = Rating.Rate.valueOf(map.get("rate"));
         Long productId = Long.parseLong(map.get("productId"));
-        productService.getProductReting( productId, r);
+        productService.getProductRating( productId, r);
     }
 
     @DeleteMapping("/rate")

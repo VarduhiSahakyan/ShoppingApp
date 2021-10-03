@@ -26,7 +26,6 @@ public class ProductService {
     public ProductService(UserService userService, ProductRepository productRepository, EntityManager entityManager) {
         this.userService = userService;
         this.productRepository = productRepository;
-
         this.entityManager = entityManager;
     }
     public void createProduct(Product product) {
@@ -62,7 +61,7 @@ public class ProductService {
     }
 
     @Transactional
-    public void getProductReting(Long productId, Rating.Rate rating) {
+    public void getProductRating(Long productId, Rating.Rate rating) {
         List<Rating> resultList;
         resultList = entityManager.createQuery(
                 "SELECT r FROM Rating r where r.productId = :pId",
@@ -72,13 +71,13 @@ public class ProductService {
 
         if (resultList.size() == 0) {
             entityManager.createNativeQuery(
-                    "insert into rates ( product_id, rate) VALUES (?, ?)")
+                    "insert into ratings ( product_id, rate) VALUES (?, ?)")
                     .setParameter(1, productId)
                     .setParameter(2, rating.name())
                     .executeUpdate();
         } else {
             entityManager.createNativeQuery(
-                    "update rates r set rate = ? where r.product_id = ?")
+                    "update ratings r set rate = ? where r.product_id = ?")
                     .setParameter(1, rating.name())
                     .setParameter(2, productId)
                     .executeUpdate();
